@@ -46,11 +46,16 @@ class selenium_md_nexus {
   	class{ '::java': }
   	
   	class{ '::nexus':
-    	version    => '2.8.0',
-    	revision   => '05',
-    	nexus_root => '/srv', # All directories and files will be relative to this
+    	version    => '2.14.5',
+    	revision   => '02',
+    	nexus_root => '/srv'
   	}
 
-  	Class['::java'] ->
-  	Class['::nexus']
+  	Class['::java'] -> Class['::nexus'] -> 
+
+  	exec{'disable_firewall':
+  		command => 'iptables -F',
+  		user    => 'root',
+  		path    => '/usr/sbin'
+  	}
 }
